@@ -1,5 +1,9 @@
 server:
   port: 8080
+#  error:
+#      include: "message"
+#      include-exception: false
+#      include-stacktrace: never
 
 spring:
   datasource:
@@ -22,3 +26,13 @@ spring:
     url: jdbc:mysql://${DB_HOST}/${DB_NAME}
     user: ${DB_MY_USER}
     password: ${DB_MY_PASS}
+
+api:
+  security:
+    secret: ${API_SECRET:123456}
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-docs

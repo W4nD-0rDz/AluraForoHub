@@ -8,11 +8,15 @@ import com.aluracursos.forohub.domain.respuesta.DatosGeneracionDeRespuesta;
 import com.aluracursos.forohub.domain.respuesta.Respuesta;
 import com.aluracursos.forohub.domain.respuesta.RespuestaRepository;
 import com.aluracursos.forohub.domain.respuesta.RespuestaService;
+import com.aluracursos.forohub.domain.respuesta.validaciones.ValidadorDeRespuesta;
+import com.aluracursos.forohub.domain.topico.validaciones.ValidadorDeTopico;
 import com.aluracursos.forohub.exceptions.TopicoNoEncontradoException;
 import com.aluracursos.forohub.exceptions.UsuarioNoAutorizadoException;
+import com.aluracursos.forohub.infra.errores.ValidacionDeIntegridad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,21 +37,29 @@ public class TopicoService {
     @Autowired
     private RespuestaService respuestaService;
 
+    @Autowired
+    List<ValidadorDeTopico> validadoresT;
+
+    @Autowired
+    List<ValidadorDeRespuesta> validadoresR;
+
 
     public TopicoDTORegistrado crearTopico(DatosRegistroTopico datos){
-//        if(autorRepository.findById(datos.idAutor()).isEmpty()){
-//            throw new ValidacionDeIntegridad("El autor no se encuentra en la base de datos");
-//        }
-//
-//        if(cursoRepository.findById(datos.idCurso()).isEmpty()){
-//            throw new ValidacionDeIntegridad("El curso de referencia no se encuentra en la base de datos");
-//        }
+        if(autorRepository.findById(datos.idAutor()).isEmpty()){
+            throw new ValidacionDeIntegridad("El autor no se encuentra en la base de datos");
+        }
+
+        if(cursoRepository.findById(datos.idCurso()).isEmpty()){
+            throw new ValidacionDeIntegridad("El curso de referencia no se encuentra en la base de datos");
+        }
 
         var autor = autorRepository.findReferenceById(datos.idAutor());
         var curso = cursoRepository.findReferenceById(datos.idCurso());
+
+        validadoresT.forEach(v->v.validar(datos));
+
         var topico = new Topico(autor, curso, datos);
         topicoRepository.save(topico);
-
         return new TopicoDTORegistrado(topico);
     }
 
@@ -59,6 +71,8 @@ public class TopicoService {
             if (optionalAutor.isPresent()) {
                 Autor autor = optionalAutor.get();
                 String tituloRespuesta = "Re: " + topico.getTitulo();
+
+                validadoresR.forEach(v->v.validar(datos));
                 Respuesta respuesta = new Respuesta(autor, topico, tituloRespuesta, datos.contenidoRespuesta());
                 topico.agregarRespuestas(respuesta);
                 topico.topicoRespondido();

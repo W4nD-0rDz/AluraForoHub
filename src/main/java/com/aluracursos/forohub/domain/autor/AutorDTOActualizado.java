@@ -9,7 +9,7 @@ public record AutorDTOActualizado(
         @JsonProperty("email") String email,
         @JsonProperty("username") String username,
         @JsonProperty("password") String password,
-        @JsonProperty("tipoUsuario") String tipoUsuario
+        @JsonProperty("tipoDeUsuario") String tipoDeUsuario
 
 ) {
     public AutorDTOActualizado(Autor autor) {

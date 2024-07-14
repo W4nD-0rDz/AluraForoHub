@@ -4,10 +4,15 @@ package com.aluracursos.forohub.domain.autor;
 import com.aluracursos.forohub.domain.respuesta.Respuesta;
 import com.aluracursos.forohub.domain.topico.Topico;
 import com.aluracursos.forohub.domain.usuario.DatosAltaUsuario;
+import com.aluracursos.forohub.domain.usuario.TipoDeUsuario;
 import com.aluracursos.forohub.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -17,7 +22,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "Autor")
 @Table(name = "autores")
-public class Autor {
+public class Autor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,10 +46,44 @@ public class Autor {
 
     public Autor(DatosAltaAutor datos) {
         this.email = datos.email();
-        this.usuario = new Usuario(new DatosAltaUsuario(this.email));
+        this.usuario = new Usuario(new DatosAltaUsuario(datos.username(), datos.tipoDeUsuario()));
         this.nombreFantasia = datos.nombreFantasia();
         this.password = datos.password();
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return usuario.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 }

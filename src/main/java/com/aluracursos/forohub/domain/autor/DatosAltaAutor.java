@@ -1,5 +1,6 @@
 package com.aluracursos.forohub.domain.autor;
 
+import com.aluracursos.forohub.domain.usuario.TipoDeUsuario;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +14,9 @@ public record DatosAltaAutor(
         @JsonProperty("nombreFantasia")
         @NotBlank(message = "Tu username será tu marca de identidad en el foro.")
         String nombreFantasia,
+
+        @JsonProperty("tipoDeUsuario")
+        TipoDeUsuario tipoDeUsuario,
 
         @JsonProperty("email")
         @Email(message = "El formato de Email inválido.")

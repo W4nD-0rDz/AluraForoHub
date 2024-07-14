@@ -24,18 +24,22 @@ public class Usuario {
 
 
     public Usuario(DatosAltaUsuario datos) {
-        this.username = extraerUsernameDesdeEmail(datos.email());
-        this.tipoDeUsuario = datos.tipoDeUsuario();
-    }
-
-    public static String extraerUsernameDesdeEmail(String email) {
-        if (email == null || !email.contains("@")) {
-            throw new IllegalArgumentException("Email inválido");
+        this.username = datos.username();
+        if (datos.tipoDeUsuario() == null) {
+            this.tipoDeUsuario = TipoDeUsuario.ESTUDIANTE; // Establecer un valor por defecto
+        } else {
+            this.tipoDeUsuario = datos.tipoDeUsuario();
         }
-        return email.split("@")[0];
     }
 
     public void cambiarTipoDeUsuario(TipoDeUsuario tipoDeUsuario){
         this.tipoDeUsuario = tipoDeUsuario;
     }
 }
+
+//    public static String extraerUsernameDesdeEmail(String email) {
+//        if (email == null || !email.contains("@")) {
+//            throw new IllegalArgumentException("Email inválido");
+//        }
+//        return email.split("@")[0];
+//    }

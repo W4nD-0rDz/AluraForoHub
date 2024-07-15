@@ -2,6 +2,8 @@ package com.aluracursos.forohub.controller;
 
 import com.aluracursos.forohub.domain.respuesta.DatosGeneracionDeRespuesta;
 import com.aluracursos.forohub.domain.topico.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @ResponseBody
 @RequestMapping("/topicos")
-//@SecurityRequirement(name = "bearer-key")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
@@ -28,16 +30,16 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    //@Operation(summary = "Registre un tópico en la base de datos.", description = "")
-    //tags = {"topico", "post"})
+    @Operation(summary = "Registre un tópico en la base de datos.", description = "",
+    tags = {"topico", "post"})
     public ResponseEntity registrarTopico(@RequestBody @Valid DatosRegistroTopico datos){
         var response = topicoServicio.crearTopico(datos);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    //@Operation(summary = "Obtener una lista de topicos")
-    //tags = {"topico", "get"})
+    @Operation(summary = "Obtenga una lista de topicos",
+    tags = {"topico", "get"})
     public ResponseEntity<Page<TopicoDTOListado>> listarTopicos(@PageableDefault(page = 0, size = 10, sort = "id")
                                                                 Pageable paginacion){
         Page<Topico> paginaTopicos =  topicoRepository.findAll(paginacion);
@@ -46,8 +48,8 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    //@Operation(summary = "Obtenga los datos de un tópico específico por ID")
-    //tags = {"topico", "get"})
+    @Operation(summary = "Obtenga los datos de un tópico específico por ID",
+    tags = {"topico", "get"})
     public ResponseEntity<TopicoDTORegistrado> mostrarTopicoporId(@PathVariable Long id){
         Topico topico = topicoRepository.findReferenceById(id);
         TopicoDTORegistrado  topicoRegistrado = new TopicoDTORegistrado(topico);
@@ -56,8 +58,8 @@ public class TopicoController {
 
     @PutMapping("/{topicoId}/respuestas")
     @Transactional
-//    //@Operation(summary = "Agrega respuestas a un tópico.")
-//    //tags = {"topico", "put"})
+    @Operation(summary = "Agrega respuestas a un tópico.",
+    tags = {"topico", "put"})
     public ResponseEntity<TopicoDTOConRespuestas> agregarRespuestaATopico(
             @PathVariable Long topicoId,
             @RequestBody @Valid DatosGeneracionDeRespuesta datos) {
@@ -67,8 +69,8 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}/respuestas")
-    //@Operation(summary = "Obtenga los datos de un tópico específico por ID y sus respuestas")
-    //tags = {"topico", "get"})
+    @Operation(summary = "Obtenga los datos de un tópico específico por ID y sus respuestas",
+    tags = {"topico", "get"})
     public ResponseEntity<TopicoDTOConRespuestas> mostrarTopicoporIdConRespuestas(@PathVariable Long id){
         Topico topico = topicoRepository.findReferenceById(id);
         if (topico == null) {
@@ -79,8 +81,8 @@ public class TopicoController {
     }
 
     @PutMapping("/{id}")
-    //@Operation(summary = "Actualiza un tópico específico por ID")
-    //tags = {"topico", "put"})
+    @Operation(summary = "Actualiza un tópico específico por ID",
+    tags = {"topico", "put"})
     public ResponseEntity<TopicoDTORegistrado> actualizarTopico(@PathVariable Long id, @RequestBody @Valid DatosActualizacionTopico datos) {
         TopicoDTORegistrado topicoEditado = topicoServicio.actualizarTopico(id, datos);
         return ResponseEntity.ok(topicoEditado);
@@ -88,8 +90,8 @@ public class TopicoController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    //@Operation(summary = "Elimine un tópico específico por ID y sus respuestas")
-    //tags = {"topico", "delete"})
+    @Operation(summary = "Elimine un tópico específico por ID y sus respuestas",
+    tags = {"topico", "delete"})
     public ResponseEntity borrarTopico(@PathVariable Long id, @RequestBody @Valid DatosActualizacionTopico datos) {
         topicoServicio.borrarTopico(id, datos.autorId());
         return ResponseEntity.noContent().build();

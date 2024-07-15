@@ -14,8 +14,11 @@ public interface AutorRepository extends JpaRepository<Autor, Long> {
     @Query("SELECT CASE WHEN COUNT(a) > 0 THEN TRUE ELSE FALSE END FROM Autor a WHERE a.usuario.username = :username")
     boolean existsByUsername(@Param("username") String username);
 
+//    @Query("SELECT a FROM Autor a WHERE a.usuario.username = :username")
+//    UserDetails findByUsername(@Param("username") String username);
+
     @Query("SELECT a FROM Autor a WHERE a.usuario.username = :username")
-    UserDetails findByUsername(@Param("username") String username);
+    Autor findByUsername(@Param("username") String username);
 
 
     //Autor findByUsuario_Username(String nombreUsuario);

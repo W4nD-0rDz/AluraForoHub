@@ -4,6 +4,7 @@ import com.aluracursos.forohub.domain.autor.*;
 
 import com.aluracursos.forohub.infra.security.DatosJWTToken;
 import com.aluracursos.forohub.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class AutenticacionController {
     private TokenService tokenService;
 
     @PostMapping
+    @Operation(summary = "Valide el login del usuario.", description = "", tags = {"autor", "post"})
     public ResponseEntity autenticarUsuario(
             @RequestBody @Valid DatosAutenticacionAutor datosAutenticacionAutor
     ) {

@@ -29,7 +29,7 @@ spring:
 
 api:
   security:
-    secret: ${API_SECRET:123456}
+    secret: ${API_SECRET}
 
 springfox:
   documentation:

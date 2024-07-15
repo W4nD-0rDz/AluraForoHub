@@ -1,5 +1,6 @@
 # FOROHUB APIRest
-![FOROHUB]()
+
+<img src="imagenes/Badge-Spring.png" alt="FOROHUB" width="100" height="100">
 
 Bienvenido a la APIRest de FOROHUB. Diseñada para facilitar la interacción en comunidades de aprendizaje. Nuestra API proporciona todas las herramientas necesarias para gestionar tópicos, respuestas y usuarios de manera eficiente y segura. ¡Únete a la conversación y enriquece tu conocimiento hoy mismo!
 
